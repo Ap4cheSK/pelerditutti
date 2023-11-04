@@ -1,0 +1,21 @@
+{
+	"name": "pelerdituttipelo",
+	"version": "1.0.0",
+	"description": "DSC bot",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no tests installed\" && exit 1",
+		"build": "tsc",
+		"start": "node server.js",
+		"prestart": "npm run build"
+	},
+	"author": "Ap4che",
+	"license": "ISC",
+	"dependencies": {
+		"discord.js": "^14.13.0",
+		"dotenv": "^16.3.1"
+	},
+	"devDependencies": {
+		"typescript": "^5.2.2"
+	}
+}
