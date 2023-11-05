@@ -5,17 +5,16 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no tests installed\" && exit 1",
-		"build": "tsc",
-		"start": "node server.js",
-		"prestart": "npm run build"
+		"start": "node index.js"
 	},
 	"author": "Ap4che",
 	"license": "ISC",
 	"dependencies": {
+		"ascii-table": "^0.0.9",
 		"discord.js": "^14.13.0",
 		"dotenv": "^16.3.1"
 	},
 	"devDependencies": {
-		"typescript": "^5.2.2"
+		"@types/node": "^20.8.10"
 	}
 }
