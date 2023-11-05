@@ -14,7 +14,6 @@ client.commands = new Collection();
 const commands = [];
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-
 module.exports = client;
 
 for(const file of commandFiles) {
@@ -53,5 +52,7 @@ const rest = new REST().setToken(process.env.BOT_TOKEN);
 // BOT READY //
 // ********* //
 
-require("./events/messageCreate");
-require("./events/interactionCreate");
+// load event triggers handlers
+["ready", "messageCreate", "interactionCreate"].forEach((eventTrigger) => {
+	require(`./events/${eventTrigger}`);
+});
