@@ -13,16 +13,12 @@ module.exports = {
 		.addNumberOption(option => 
 			option.setName("ammount").setDescription("Ammount of money.").setRequired(true)),
 	async execute(interaction) {
-		const have_currency = interaction.options.getString("have_currency");
-		const want_currency = interaction.options.getString("want_currency");
+		const have_currency = (interaction.options.getString("have_currency")).toUpperCase();
+		const want_currency = (interaction.options.getString("want_currency")).toUpperCase();
 		const ammount = interaction.options.getNumber("ammount");
-		let api_response;
 
 		request.get({
-			url: `https://api.api-ninjas.com/v1/convertcurrency?want=${want_currency}&have=${have_currency}&amount=${ammount}`,
-			headers: {
-				'X-Api-Key': 'WJxlnead88cnCg6b8G+V0A==rq2ffPq0YG7VB4yX'
-			}
+			url: `https://api.currencyapi.com/v3/latest?apikey=cur_live_lsHsMB390Rt5mzQJHOH2UGD9fHjpot7mNrt0r0iX&currencies=${want_currency}&base_currency=${have_currency}`,
 		}, function(error, response, body) {
 			if(error) return console.error('Request failed:', error);
 			else if(response.statusCode != 200) {
@@ -30,11 +26,10 @@ module.exports = {
 				return console.error('Error:', response.statusCode, body.toString('utf8'));
 			} else {
 				const api = JSON.parse(body);
-				const apiOldAmmount = (api.old_amount).toString();
-				const apiOldCurr = api.old_currency;
-				const apiNewAmmount = (api.new_amount).toString();
-				const apiNewCurr = api.new_currency;
-				interaction.reply(`${apiOldAmmount} ${apiOldCurr} = ${apiNewAmmount} ${apiNewCurr}`);
+				const conversions = Object.values(api.data);
+				const conversion_rate = conversions[0].value;
+				const new_price = Math.round((ammount * conversion_rate) * 100) / 100;
+				interaction.reply(`${ammount} ${have_currency} = ${new_price} ${want_currency}`);
 			}
 		});
 	},
