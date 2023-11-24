@@ -2,6 +2,7 @@ require("dotenv").config();
 const path = require("path");
 const fs = require("fs");
 const { Client, Collection,  Events, GatewayIntentBits, Message, REST, Routes } = require("discord.js");
+const mysql = require("mysql2");
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.MessageContent,] });
@@ -14,7 +15,28 @@ client.commands = new Collection();
 const commands = [];
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-module.exports = client;
+
+// connect to DB
+const database = mysql.createPool({
+	host: "127.0.0.1",
+	user: "root",
+	password: "",
+	database: "pelerditutti",
+	waitForConnections: true,
+	connectionLimit: 5,
+	queueLimit: 0
+});
+
+database.on("connection", (connection) => {
+	console.log("Connected to DB.");
+	connection.on("error", (err) => {
+		console.error("DB Connection error: ", err.code);
+	});
+	connection.on("close", () => {
+		console.log("DB Connection closed.");
+	});
+})
+module.exports = {client, database};
 
 for(const file of commandFiles) {
 	const filePath = path.join(commandsPath, file);
