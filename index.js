@@ -17,15 +17,6 @@ const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 // connect to DB
-const database = mysql.createPool({
-	host: "127.0.0.1",
-	user: "ap4che",
-	password: "discordbot",
-	database: "pelerditutti",
-	waitForConnections: true,
-	connectionLimit: 5,
-	queueLimit: 0
-});
 // const database = mysql.createPool({
 // 	host: "127.0.0.1",
 // 	user: "root",
@@ -36,16 +27,17 @@ const database = mysql.createPool({
 // 	queueLimit: 0
 // });
 
-database.on("connection", (connection) => {
-	console.log("Connected to DB.");
-	connection.on("error", (err) => {
-		console.error("DB Connection error: ", err.code);
-	});
-	connection.on("close", () => {
-		console.log("DB Connection closed.");
-	});
-})
-module.exports = {client, database};
+// database.on("connection", (connection) => {
+// 	console.log("Connected to DB.");
+// 	connection.on("error", (err) => {
+// 		console.error("DB Connection error: ", err.code);
+// 	});
+// 	connection.on("close", () => {
+// 		console.log("DB Connection closed.");
+// 	});
+// })
+// module.exports = {client, database};
+module.exports = {client};
 
 for(const file of commandFiles) {
 	const filePath = path.join(commandsPath, file);

@@ -1,24 +1,24 @@
 const {client, database} = require("../");
 
-function insertUser(insertData) {
-	database.query("INSERT INTO users SET ?", insertData, (err) => {
-		if(err) {
-			console.error("Error executing query: ", err);
-			return;
-		}
-		console.log(`New user ${insertData.userid} inserted.`);
-	})
-}
+// function insertUser(insertData) {
+// 	database.query("INSERT INTO users SET ?", insertData, (err) => {
+// 		if(err) {
+// 			console.error("Error executing query: ", err);
+// 			return;
+// 		}
+// 		console.log(`New user ${insertData.userid} inserted.`);
+// 	})
+// }
 
-function updateKarma(newkarma, findUser) {
-	database.query(`UPDATE users SET karma=${newkarma} WHERE userid=${findUser}`, (err) => {
-		if(err) {
-			console.error("Error executing query: ", err);
-			return;
-		}
-		console.log(`User ${findUser} updated.`);
-	})
-}
+// function updateKarma(newkarma, findUser) {
+// 	database.query(`UPDATE users SET karma=${newkarma} WHERE userid=${findUser}`, (err) => {
+// 		if(err) {
+// 			console.error("Error executing query: ", err);
+// 			return;
+// 		}
+// 		console.log(`User ${findUser} updated.`);
+// 	})
+// }
 
 client.on("messageCreate", (message) => {
 	// Bot self-protection
@@ -48,35 +48,34 @@ client.on("messageCreate", (message) => {
 		message.reply(`I have fixed the Instagram for you: ${instagramPostLink}`);
 	}
 
-	// Message Counter
-	// Detect messages longer than 5 chars
-	if(message.content.length > 6) {
-		const userid = message.author.id;
-		const findUser = {userid: userid};
+	// Message Counter // Detect messages longer than 5 chars
+	// if(message.content.length > 6) {
+	// 	const userid = message.author.id;
+	// 	const findUser = {userid: userid};
 		
-		database.promise().query("SELECT * FROM users WHERE ?", findUser)
-		.then(([result]) => {
-			if(result.length > 0) {
-				// user in DB
-				const newKarma = (result[0].karma) + 1;
-				updateKarma(newKarma, findUser.userid);
-			} else {
-				// user not in DB
-				message.guild.members.fetch(userid)
-				.then((member) => {
-					const newUser = {
-						username: member.user.username,
-						userid: member.id,
-						joinedGuild: member.joinedAt,
-						karma: 1,
-					};
-					insertUser(newUser);
-				})
-				.catch(console.error);
-				return;
-			}
-		})
-		.catch(console.error);
-		return;
-	};
+	// 	database.promise().query("SELECT * FROM users WHERE ?", findUser)
+	// 	.then(([result]) => {
+	// 		if(result.length > 0) {
+	// 			// user in DB
+	// 			const newKarma = (result[0].karma) + 1;
+	// 			updateKarma(newKarma, findUser.userid);
+	// 		} else {
+	// 			// user not in DB
+	// 			message.guild.members.fetch(userid)
+	// 			.then((member) => {
+	// 				const newUser = {
+	// 					username: member.user.username,
+	// 					userid: member.id,
+	// 					joinedGuild: member.joinedAt,
+	// 					karma: 1,
+	// 				};
+	// 				insertUser(newUser);
+	// 			})
+	// 			.catch(console.error);
+	// 			return;
+	// 		}
+	// 	})
+	// 	.catch(console.error);
+	// 	return;
+	// };
 });
