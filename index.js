@@ -19,13 +19,22 @@ const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('
 // connect to DB
 const database = mysql.createPool({
 	host: "127.0.0.1",
-	user: "root",
-	password: "",
+	user: "ap4che",
+	password: "discordbot",
 	database: "pelerditutti",
 	waitForConnections: true,
 	connectionLimit: 5,
 	queueLimit: 0
 });
+// const database = mysql.createPool({
+// 	host: "127.0.0.1",
+// 	user: "root",
+// 	password: "",
+// 	database: "pelerditutti",
+// 	waitForConnections: true,
+// 	connectionLimit: 5,
+// 	queueLimit: 0
+// });
 
 database.on("connection", (connection) => {
 	console.log("Connected to DB.");
