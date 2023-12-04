@@ -41,7 +41,7 @@ client.on("messageCreate", (message) => {
 	}
 
 	// Instagram detection
-	const instagramRegex = /^https:\/\/www\.instagram\.com\/reel\/[a-zA-Z0-9_-]+\/$/;
+	const instagramRegex = /(https?:\/\/)?(www\.)?instagram\.com\/(?:p|reel|reels)\/([a-zA-Z0-9_-]+)/;
 	if(instagramRegex.test(message.content)) {
 		let instagramPostLink = message.content.match(instagramRegex)[0];
 		instagramPostLink = instagramPostLink.replace("instagram.com/", "ddinstagram.com/");
