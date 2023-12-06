@@ -1,0 +1,14 @@
+[Unit]
+Description=Peler Di Tutti DISCORD BOT
+After=network.target
+
+[Service]
+ExecStart=/home/opc/ap4bot/start.sh
+Restart=always
+RestartSec=3
+User=root
+Group=root
+WorkingDirectory=/home/opc/ap4bot/
+
+[Install]
+WantedBy=multi-user.target
