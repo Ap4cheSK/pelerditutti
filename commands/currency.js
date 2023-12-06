@@ -18,7 +18,7 @@ module.exports = {
 		const ammount = interaction.options.getNumber("ammount");
 
 		request.get({
-			url: `https://api.currencyapi.com/v3/latest?apikey=cur_live_lsHsMB390Rt5mzQJHOH2UGD9fHjpot7mNrt0r0iX&currencies=${want_currency}&base_currency=${have_currency}`,
+			url: `https://api.currencyapi.com/v3/latest?apikey=${process.env.CURRENCY_KEY}&currencies=${want_currency}&base_currency=${have_currency}`,
 		}, function(error, response, body) {
 			if(error) return console.error('Request failed:', error);
 			else if(response.statusCode != 200) {

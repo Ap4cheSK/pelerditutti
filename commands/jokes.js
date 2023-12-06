@@ -17,7 +17,7 @@ module.exports = {
 		request.get({
 			url: `https://api.api-ninjas.com/v1/jokes?limit=${count}`,
 			headers: {
-				'X-Api-Key': 'WJxlnead88cnCg6b8G+V0A==rq2ffPq0YG7VB4yX'
+				'X-Api-Key': `${process.env.NINJA_KEY}`
 			}
 		}, function(error, response, body) {
 			if(error) return console.error('Request failed:', error);
