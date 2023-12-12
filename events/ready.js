@@ -17,7 +17,7 @@ client.once("ready", () => {
 	// ************ //
 	// DOBRE REJNOU //
 	// ************ //
-	cron.schedule("0 0 8 * * *", () => {
+	cron.schedule("0 0 7 * * *", () => {
 		channel.send("https://cdn.discordapp.com/attachments/1033122941719822377/1138344315966464030/dobre_rejnou.mp4");
 	});
 });

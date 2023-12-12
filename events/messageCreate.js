@@ -22,7 +22,8 @@ function updateKarma(newkarma, findUser) {
 
 client.on("messageCreate", (message) => {
 	// Bot self-protection
-	if(message.author.bot) return;
+	if(message.author.bot)
+		return;
 
 	// Twitter detection
 	const twitterRegex = /https:\/\/twitter\.com\/\S+\/status\/\d+/;
@@ -35,6 +36,8 @@ client.on("messageCreate", (message) => {
 	// X detection
 	const xcomRegex = /https:\/\/x\.com\/\S+\/status\/\d+/;
 	if(xcomRegex.test(message.content)) {
+		if(message.content.includes("fxtwitter.com"))
+			return;
 		let xcomPostLink = message.content.match(xcomRegex)[0];
 		xcomPostLink = xcomPostLink.replace("x.com/", "fxtwitter.com/");
 		message.reply(`I have fixed the X for you: ${xcomPostLink}`);
@@ -43,6 +46,8 @@ client.on("messageCreate", (message) => {
 	// Instagram detection
 	const instagramRegex = /(https?:\/\/)?(www\.)?instagram\.com\/(?:p|reel|reels)\/([a-zA-Z0-9_-]+)/;
 	if(instagramRegex.test(message.content)) {
+		if(message.content.includes("ddinstagram.com"))
+			return;
 		let instagramPostLink = message.content.match(instagramRegex)[0];
 		instagramPostLink = instagramPostLink.replace("instagram.com/", "ddinstagram.com/");
 		message.reply(`I have fixed the Instagram for you: ${instagramPostLink}`);
