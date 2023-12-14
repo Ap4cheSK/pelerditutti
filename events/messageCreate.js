@@ -17,7 +17,27 @@ function updateKarma(newkarma, findUser) {
 			return;
 		}
 		console.log(`User ${findUser} updated.`);
+	});
+}
+
+function insertChannel(insertData) {
+	database.query("INSERT INTO channels SET ?", insertData, (err) => {
+		if(err) {
+			console.error("Error executing query: ", err);
+			return;
+		}
+		console.log(`New channel ${insertData.channelid} inserted.`);
 	})
+}
+
+function updateChannelMsg(newmsg, findChannel) {
+	database.query(`UPDATE channels SET messages=${newmsg} WHERE channelid=${findChannel}`, (err) => {
+		if(err) {
+			console.error("Error executing query: ", err);
+			return;
+		}
+		console.log(`Channel ${findChannel} updated.`);
+	});
 }
 
 client.on("messageCreate", (message) => {
@@ -55,6 +75,7 @@ client.on("messageCreate", (message) => {
 
 	// Message Counter // Detect messages longer than 5 chars
 	if(message.content.length > 6) {
+		//user write
 		const userid = message.author.id;
 		const findUser = {userid: userid};
 		
@@ -77,10 +98,32 @@ client.on("messageCreate", (message) => {
 					insertUser(newUser);
 				})
 				.catch(console.error);
-				return;
 			}
 		})
 		.catch(console.error);
+
+		//channel write
+		const channelid = message.channelId;
+		const findChannel = {channelid: channelid};
+
+		database.promise().query("SELECT * FROM channels WHERE ?", findChannel)
+		.then(([result]) => {
+			if(result.length > 0) {
+				// channel in DB
+				const newMessages = (result[0].messages) + 1;
+				updateChannelMsg(newMessages, findChannel.channelid);
+			} else {
+				// channel not in DB
+				const newChannel = {
+					name: message.channel.name,
+					channelid: channelid,
+					messages: 1,
+				};
+				insertChannel(newChannel);
+			}
+		})
+		.catch(console.error);
+
 		return;
 	};
 });
