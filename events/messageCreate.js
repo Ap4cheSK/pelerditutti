@@ -74,7 +74,8 @@ client.on("messageCreate", (message) => {
 	}
 
 	// Reddit detection
-	const redditRegex = /^https?:\/\/(?:www\.)?reddit\.com\/r\/[^\/]+\/comments\/[a-z0-9]+\/[^\/]+\/?$/i;
+	// const redditRegex = /^https?:\/\/(?:www\.)?reddit\.com\/r\/[^\/]+\/comments\/[a-z0-9]+\/[^\/]+\/?$/i;
+	const redditRegex = /^https?:\/\/(?:www\.)?reddit\.com\/r\/[^\/]+\/comments\/[a-z0-9]+\/[^\/]+\/?(?:\?.*)?$/i;
 	if(redditRegex.test(message.content)) {
 		if(message.content.includes("rxddit.com"))
 			return;
