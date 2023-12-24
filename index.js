@@ -17,26 +17,26 @@ const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 // connect to DB
-// const database = mysql.createPool({
-// 	host: "localhost",
-// 	user: `${process.env.DB_USER}`,
-// 	password: `${process.env.DB_PASSWD}`,
-// 	database: `${process.env.DB_DB}`,
-// 	waitForConnections: true,
-// 	connectionLimit: 5,
-// 	queueLimit: 0
-// });
-
-//DEV DB
 const database = mysql.createPool({
 	host: "localhost",
-	user: `root`,
-	password: ``,
+	user: `${process.env.DB_USER}`,
+	password: `${process.env.DB_PASSWD}`,
 	database: `${process.env.DB_DB}`,
 	waitForConnections: true,
 	connectionLimit: 5,
 	queueLimit: 0
 });
+
+//DEV DB
+// const database = mysql.createPool({
+// 	host: "localhost",
+// 	user: `root`,
+// 	password: ``,
+// 	database: `${process.env.DB_DB}`,
+// 	waitForConnections: true,
+// 	connectionLimit: 5,
+// 	queueLimit: 0
+// });
 
 database.on("connection", (connection) => {
 	console.log("Connected to DB.");

@@ -73,6 +73,16 @@ client.on("messageCreate", (message) => {
 		message.reply(`I have fixed the Instagram for you: ${instagramPostLink}`);
 	}
 
+	// Reddit detection
+	const redditRegex = /^https?:\/\/(?:www\.)?reddit\.com\/r\/[^\/]+\/comments\/[a-z0-9]+\/[^\/]+\/?$/i;
+	if(redditRegex.test(message.content)) {
+		if(message.content.includes("rxddit.com"))
+			return;
+		let redditPostLink = message.content.match(redditRegex)[0];
+		redditPostLink = redditPostLink.replace("reddit.com/", "rxddit.com/");
+		message.reply(`I have fixed the Reddit for you: ${redditPostLink}`);
+	}
+
 	// Message Counter // Detect messages longer than 5 chars
 	if(message.content.length > 6) {
 		//user write
