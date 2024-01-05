@@ -1,4 +1,6 @@
-const {client, database} = require("../");
+require("dotenv").config();
+const { client, database } = require("../");
+const cfg_karmaMessageLength = process.env.KARMA_MSG_LENGTH;
 
 function insertUser(insertData) {
 	database.query("INSERT INTO users SET ?", insertData, (err) => {
@@ -48,6 +50,8 @@ client.on("messageCreate", (message) => {
 	// Twitter detection
 	const twitterRegex = /https:\/\/twitter\.com\/\S+\/status\/\d+/;
 	if(twitterRegex.test(message.content)) {
+		if(message.content.includes("fxtwitter.com") || message.content.includes("vxtwitter.com"))
+			return;
 		let twitterPostLink = message.content.match(twitterRegex)[0];
 		twitterPostLink = twitterPostLink.replace("twitter.com/", "fxtwitter.com/");
 		message.reply(`I have fixed the Twitter for you: ${twitterPostLink}`);
@@ -56,7 +60,7 @@ client.on("messageCreate", (message) => {
 	// X detection
 	const xcomRegex = /https:\/\/x\.com\/\S+\/status\/\d+/;
 	if(xcomRegex.test(message.content)) {
-		if(message.content.includes("fxtwitter.com"))
+		if(message.content.includes("fxtwitter.com") || message.content.includes("vxtwitter.com"))
 			return;
 		let xcomPostLink = message.content.match(xcomRegex)[0];
 		xcomPostLink = xcomPostLink.replace("x.com/", "fxtwitter.com/");
@@ -85,8 +89,18 @@ client.on("messageCreate", (message) => {
 	}
 
 	// Message Counter // Detect messages longer than 5 chars
-	if(message.content.length > 6) {
-		//user write
+	if(message.content.length >= cfg_karmaMessageLength) {
+		let karmaMsg = message.content;
+		karmaMsg = karmaMsg.replace(/<:.+?:\d+>/gi, ""); // remove emojis/gifs?
+		karmaMsg = karmaMsg.replace(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi, ""); // remove URLs?
+		karmaMsg = karmaMsg.replace("https://", "");
+		karmaMsg = karmaMsg.replace("http://", "");
+		karmaMsg = karmaMsg.replace(/ /g, ""); // remove spacebars
+
+		if(karmaMsg.length < cfg_karmaMessageLength)
+			return;
+
+		// message is ok, write to DB
 		const userid = message.author.id;
 		const findUser = {userid: userid};
 		
@@ -113,7 +127,7 @@ client.on("messageCreate", (message) => {
 		})
 		.catch(console.error);
 
-		//channel write
+		// write channel statistics
 		const channelid = message.channelId;
 		const findChannel = {channelid: channelid};
 

@@ -5,7 +5,7 @@ const { Client, Collection,  Events, GatewayIntentBits, Message, REST, Routes } 
 const mysql = require("mysql2");
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.MessageContent,] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.GuildMembers,GatewayIntentBits.MessageContent,GatewayIntentBits.GuildMessageReactions] });
 
 // Log in to Discord with your client's token
 client.login(process.env.BOT_TOKEN);
@@ -16,27 +16,30 @@ const commands = [];
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-// connect to DB
-const database = mysql.createPool({
-	host: "localhost",
-	user: `${process.env.DB_USER}`,
-	password: `${process.env.DB_PASSWD}`,
-	database: `${process.env.DB_DB}`,
-	waitForConnections: true,
-	connectionLimit: 5,
-	queueLimit: 0
-});
-
-//DEV DB
-// const database = mysql.createPool({
-// 	host: "localhost",
-// 	user: `root`,
-// 	password: ``,
-// 	database: `${process.env.DB_DB}`,
-// 	waitForConnections: true,
-// 	connectionLimit: 5,
-// 	queueLimit: 0
-// });
+let database;
+if(process.env.DEV == 1) {
+	//DEV DB
+	database = mysql.createPool({
+		host: "localhost",
+		user: `root`,
+		password: ``,
+		database: `${process.env.DB_DB}`,
+		waitForConnections: true,
+		connectionLimit: 5,
+		queueLimit: 0,
+	});
+} else {
+	// connect to DB
+	database = mysql.createPool({
+		host: "localhost",
+		user: `${process.env.DB_USER}`,
+		password: `${process.env.DB_PASSWD}`,
+		database: `${process.env.DB_DB}`,
+		waitForConnections: true,
+		connectionLimit: 5,
+		queueLimit: 0,
+	});
+}
 
 database.on("connection", (connection) => {
 	console.log("Connected to DB.");
@@ -89,4 +92,5 @@ const rest = new REST().setToken(process.env.BOT_TOKEN);
 // load event triggers handlers
 ["ready", "messageCreate", "interactionCreate"].forEach((eventTrigger) => {
 	require(`./events/${eventTrigger}`);
+	console.log(`Loaded Event: ${eventTrigger}.js`);
 });

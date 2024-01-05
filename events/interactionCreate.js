@@ -1,5 +1,5 @@
 const { Events } = require("discord.js");
-const {client, database} = require("../");
+const { client, database } = require("../");
 const { time } = require("console");
 
 function clock() {

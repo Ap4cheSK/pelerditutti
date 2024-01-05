@@ -1,5 +1,7 @@
-const {client, database} = require("../");
+const { MessageManager, TextChannel } = require("discord.js");
+const { client, database } = require("../");
 const cron = require("node-cron");
+require("dotenv").config();
 
 client.once("ready", () => {
 	client.user.setStatus("online");
@@ -15,4 +17,12 @@ client.once("ready", () => {
 	cron.schedule("0 0 7 * * *", () => {
 		channel.send("https://cdn.discordapp.com/attachments/1033122941719822377/1138344315966464030/dobre_rejnou.mp4");
 	});
+
+	// Fetch role msg and react
+	// guild.channels.cache.get(process.env.ROLE_CHANNEL).messages.fetch(process.env.ROLE_MSG_ID)
+	// 	.then((message) => {
+	// 		["🇪","🇦","🇿","🇧","🇭","7️⃣","🇹","🇱"].forEach((item) => {
+	// 			message.react(`${item}`);
+	// 		});
+	// 	});
 });
